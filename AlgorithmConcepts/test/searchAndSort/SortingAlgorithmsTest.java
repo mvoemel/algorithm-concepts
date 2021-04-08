@@ -71,6 +71,20 @@ public class SortingAlgorithmsTest {
 	}
 	
 	@Test
+	public void testParallelMergeSort() {
+		int numThreads = 4;
+		int[] array1 = {2,5,7,1,3,6,9,8,4};
+		int[] result1 = ParallelMergeSort.sort(array1, numThreads);
+		assertEquals(true, IsSorted.isSorted(result1));
+		int[] array2 = {};
+		int[] result2 = ParallelMergeSort.sort(array2, numThreads);
+		assertEquals(true, IsSorted.isSorted(result2));
+		int[] array3 = {13,45,19,205,275,1085,9,2,74};
+		int[] result3 = ParallelMergeSort.sort(array3, numThreads);
+		assertEquals(true, IsSorted.isSorted(result3));
+	}
+	
+	@Test
 	public void testQuickSort() {
 		int[] array1 = {2,5,7,1,3,6,9,8,4};
 		QuickSort.quickSort(array1);
