@@ -97,4 +97,18 @@ public class SortingAlgorithmsTest {
 		assertEquals(true, IsSorted.isSorted(array3));
 	}
 	
+	@Test
+	public void testParallelQuickSort() {
+		int numThreads = 4;
+		int[] array1 = {2,5,7,1,3,6,9,8,4};
+		ParallelQuickSort.sort(array1, numThreads);
+		assertEquals(true, IsSorted.isSorted(array1));
+		int[] array2 = {};
+		ParallelQuickSort.sort(array2, numThreads);
+		assertEquals(true, IsSorted.isSorted(array2));
+		int[] array3 = {13,45,19,205,275,1085,9,2,74};
+		ParallelQuickSort.sort(array3, numThreads);
+		assertEquals(true, IsSorted.isSorted(array3));
+	}
+	
 }

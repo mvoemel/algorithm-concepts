@@ -1,7 +1,7 @@
 package searchAndSort;
 
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.RecursiveTask;
+import java.util.concurrent.RecursiveAction;
 
 /*
 	This is a parallelized version of Mergesort using the ForkJoin structure. As input 
@@ -12,18 +12,20 @@ import java.util.concurrent.RecursiveTask;
 	@date 08.04.2021
 */
 
-public class ParallelMergeSort extends RecursiveTask<int[]>{
+public class ParallelMergeSort extends RecursiveAction{
 	
 	private static final long serialVersionUID = 1531647254971804196L;
 	
 	private int[] input;
 	private int start;
 	private int length;
+	private int[] result;
 	
 	private ParallelMergeSort(int[] input, int start, int length) {
 		this.input = input;
 		this.start = start;
 		this.length = length;
+		this.result = new int[length];
 	}//Constructor
 	
 	//sorts the the given int[] input array using the forkjoin structure with numThreads threads
@@ -32,9 +34,9 @@ public class ParallelMergeSort extends RecursiveTask<int[]>{
 		
 		ParallelMergeSort app = new ParallelMergeSort(input, 0, input.length);
 		ForkJoinPool fjp = new ForkJoinPool(numThreads);
-		int[] array = fjp.invoke(app);
+		fjp.invoke(app);
 		
-		return array;
+		return app.result;
 	}//end sort
 	
 	private static void merge(int[] in1, int[] in2, int[] output) {	
@@ -60,9 +62,7 @@ public class ParallelMergeSort extends RecursiveTask<int[]>{
 	}//end merge
 	
 	@Override
-	protected int[] compute() {
-		int[] result = new int[length];
-		
+	protected void compute() {
 		if (length == 1) {
 			result[0] = input[start];
 
@@ -77,16 +77,15 @@ public class ParallelMergeSort extends RecursiveTask<int[]>{
 		} else {
 			int halfSize = length/2;
 			
-			ParallelMergeSort msort1 = new ParallelMergeSort(input, start, halfSize);
-			msort1.fork();
+			ParallelMergeSort firstHalf = new ParallelMergeSort(input, start, halfSize);
+			ParallelMergeSort secondHalf = new ParallelMergeSort(input, start+halfSize, length-halfSize);
 			
-			ParallelMergeSort msort2 = new ParallelMergeSort(input, start+halfSize, length-halfSize);
-			msort2.fork();
+			firstHalf.fork();
+			secondHalf.compute();
+			firstHalf.join();
 			
-			merge(msort1.join(), msort2.join(), result);
+			merge(firstHalf.result, secondHalf.result, this.result);
 		}
-		
-		return result;
 	}//end compute
 	
 }//ParallelMergeSort
