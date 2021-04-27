@@ -1,6 +1,7 @@
 package searchAndSort;
 
 import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 public class SortingAlgorithmsTest {
@@ -94,6 +95,19 @@ public class SortingAlgorithmsTest {
 		assertEquals(true, IsSorted.isSorted(array2));
 		int[] array3 = {13,45,19,205,275,1085,9,2,74};
 		QuickSort.quickSort(array3);
+		assertEquals(true, IsSorted.isSorted(array3));
+	}
+	
+	@Test
+	public void testRandomQuickSort() {
+		int[] array1 = {2,5,7,1,3,6,9,8,4};
+		RandomQuickSort.quickSort(array1);
+		assertEquals(true, IsSorted.isSorted(array1));
+		int[] array2 = {};
+		RandomQuickSort.quickSort(array2);
+		assertEquals(true, IsSorted.isSorted(array2));
+		int[] array3 = {13,45,19,205,275,1085,9,2,74};
+		RandomQuickSort.quickSort(array3);
 		assertEquals(true, IsSorted.isSorted(array3));
 	}
 	
